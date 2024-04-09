@@ -49,7 +49,7 @@ async function handleLogout() {
                 />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4 flex justify-end">
                 <NuxtLink to="/entries/create">
                     <Button
                         label="Add Transaction"
