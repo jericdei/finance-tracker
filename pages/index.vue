@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Entry } from "@prisma/client"
+import type { AccountCategory, Entry, Prisma } from "@prisma/client"
 import moment from "moment"
 
 useHead({
@@ -12,16 +12,26 @@ definePageMeta({
 
 const { user, logout } = useUserStore()
 
-const entries = ref<Entry[] | null>(null)
+type CategoryWithRelations = Prisma.AccountCategoryGetPayload<{
+    include: {
+        accounts: {
+            include: {
+                entries: true
+            }
+        }
+    }
+}>
+
+const categories = ref<CategoryWithRelations[] | null>(null)
 
 onBeforeMount(async () => {
-    const { entries: dbEntries } = await $fetch("/api/entries", {
+    const { categories: dbCategories } = await $fetch("/api/categories", {
         params: {
             userId: user?.id,
         },
     })
 
-    entries.value = JSON.parse(JSON.stringify(dbEntries))
+    categories.value = JSON.parse(JSON.stringify(dbCategories))
 })
 
 async function handleLogout() {
@@ -61,17 +71,43 @@ async function handleLogout() {
 
             <div class="mt-8">
                 <div
-                    v-if="!entries"
+                    v-if="!categories"
                     class="grid place-items-center"
                 >
                     <ProgressSpinner />
                 </div>
 
-                <div v-else-if="entries.length === 0">
+                <div v-else-if="categories.length === 0">
                     <p class="text-center">No entries found.</p>
                 </div>
 
-                <DataTable
+                <div
+                    v-else
+                    class="flex flex-col gap-4"
+                >
+                    <Panel
+                        v-for="category in categories"
+                        :key="category.id"
+                        :header="category.name"
+                        toggleable
+                        collapsed
+                    >
+                        <pre wrap>{{ category.accounts.map((acc) => acc.entries).flat() }}</pre>
+                        <DataTable :value="category.accounts.map((acc) => acc.entries).flat()">
+                            <Column
+                                field="id"
+                                header="ID"
+                            />
+
+                            <Column
+                                field="category.name"
+                                header="Type"
+                            />
+                        </DataTable>
+                    </Panel>
+                </div>
+
+                <!-- <DataTable
                     v-else
                     :value="entries"
                 >
@@ -116,7 +152,7 @@ async function handleLogout() {
                             {{ moment(data.updatedAt).fromNow() }}
                         </template>
                     </Column>
-                </DataTable>
+                </DataTable> -->
             </div>
         </div>
     </div>

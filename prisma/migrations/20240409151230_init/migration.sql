@@ -25,7 +25,7 @@ CREATE TABLE "Entry" (
     "accountId" INTEGER NOT NULL,
     "amount" REAL NOT NULL,
     "userId" INTEGER NOT NULL,
-    "createdAt" DATETIME NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
     "deletedAt" DATETIME,
     CONSTRAINT "Entry_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
