@@ -8,5 +8,8 @@ export default defineNuxtConfig({
             exclude: ["Editor", "Chart"],
         },
     },
+    imports: {
+        dirs: ["stores"],
+    },
     css: ["primevue/resources/themes/lara-light-purple/theme.css", "remixicon/fonts/remixicon.css"],
 })

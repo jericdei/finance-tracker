@@ -1,9 +1,9 @@
 import type { User } from "@prisma/client"
 
-export const useStore = defineStore("main", {
+export const useUserStore = defineStore("main", {
     state: () => {
         return {
-            user: null as User | null,
+            user: useState("user", () => null as User | null),
         }
     },
     actions: {
@@ -14,7 +14,9 @@ export const useStore = defineStore("main", {
             this.user = null
         },
     },
-    persist: {
-        storage: persistedState.localStorage,
-    },
+    persist: true,
 })
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
+}

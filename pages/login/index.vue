@@ -7,7 +7,7 @@ useHead({
     title: "Login",
 })
 
-const { setUser } = useStore()
+const { setUser } = useUserStore()
 
 const pin = ref("")
 const error = ref(false)
@@ -41,7 +41,7 @@ watch(pin, async (newVal, oldVal) => {
 </script>
 
 <template>
-    <main>
+    <div>
         <h1 class="text-center text-2xl font-bold">Enter your PIN</h1>
 
         <div class="mt-8">
@@ -58,5 +58,5 @@ watch(pin, async (newVal, oldVal) => {
                 >
             </div>
         </div>
-    </main>
+    </div>
 </template>

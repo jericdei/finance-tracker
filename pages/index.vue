@@ -7,7 +7,7 @@ definePageMeta({
     middleware: ["auth"],
 })
 
-const { user, logout } = useStore()
+const { user, logout } = useUserStore()
 
 async function handleLogout() {
     logout()
@@ -32,7 +32,15 @@ async function handleLogout() {
                 />
             </div>
 
-            <div class=""></div>
+            <div class="mt-4">
+                <NuxtLink to="/transactions/create">
+                    <Button
+                        label="Add Transaction"
+                        icon="ri-add-line"
+                        severity="success"
+                    />
+                </NuxtLink>
+            </div>
         </div>
     </div>
 </template>
