@@ -29,19 +29,19 @@ model AccountCategory {
 model Account {
   id         Int             @id @default(autoincrement())
   name       String
-  category   AccountCategory @relation(fields: [categoryId], references: [id])
   categoryId Int
+  category   AccountCategory @relation(fields: [categoryId], references: [id])
   Entry      Entry[]
 }
 
 model Entry {
   id        Int     @id @default(autoincrement())
-  account   Account @relation(fields: [accountId], references: [id])
   accountId Int
+  account   Account @relation(fields: [accountId], references: [id])
   amount    Float
-  user      User    @relation(fields: [userId], references: [id])
   userId    Int
-  createdAt DateTime
-  updatedAt DateTime?
+  user      User    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 }

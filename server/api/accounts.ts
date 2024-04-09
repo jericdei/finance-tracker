@@ -1,16 +1,18 @@
 import { PrismaClient } from "@prisma/client"
+
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
-    const body = await readBody(event)
+    const { categoryId } = getQuery(event)
 
-    const user = await prisma.user.findFirst({
+    const accounts = await prisma.account.findMany({
         where: {
-            pin: body.pin,
+            categoryId: parseInt(categoryId as string),
         },
     })
 
     return {
-        user,
+        accounts,
+        categoryId,
     }
 })
